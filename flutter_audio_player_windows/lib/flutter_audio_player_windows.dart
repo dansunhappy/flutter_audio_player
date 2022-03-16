@@ -31,7 +31,7 @@ class AudioPlayerWindows extends AudioPlayerPlatform {
   @override
   Future<void> init() async {
     DartVLC.initialize();
-    _player = Player(id: 1);
+    _player = Player(id: 9999);
     _player.textureId.addListener(() {});
     _onListener = () {
       _player.playbackStream.listen((event) {
