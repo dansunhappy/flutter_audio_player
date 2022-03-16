@@ -29,7 +29,7 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
     if (dataSource is AudioDataSource && dataSource.audioSourceType == AudioSourceType.audio) {
       audio = _covertAudioDataSourceToAudio(dataSource);
     } else if (dataSource is AudioPlaylist) {
-      Playlist(
+      audio = Playlist(
         audios: dataSource.playList.map(_covertAudioDataSourceToAudio).toList(),
       );
     }
