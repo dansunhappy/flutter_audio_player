@@ -4,7 +4,7 @@
 // directory. You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' if (dart.library.io) 'dart:io' if (dart.library.html) 'dart:html';
 
 import 'package:flutter_audio_player_platform_interface/audio_data_source.dart';
 import 'package:flutter_audio_player_platform_interface/flutter_audio_player_platform_interface.dart';
