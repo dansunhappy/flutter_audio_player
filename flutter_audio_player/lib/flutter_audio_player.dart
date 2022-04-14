@@ -4,13 +4,16 @@
 // directory. You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
 import 'dart:async';
-import 'dart:io' if (dart.library.io) 'dart:io' if (dart.library.html) 'dart:html';
+// import 'dart:io' if (dart.library.io) 'dart:io' if (dart.library.html) 'dart:html';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_audio_player_platform_interface/audio_data_source.dart';
 import 'package:flutter_audio_player_platform_interface/flutter_audio_player_platform_interface.dart';
 import 'package:flutter_audio_player_platform_interface/method_channel_audio_player.dart';
-import 'package:flutter_audio_player_windows/flutter_audio_player_windows.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_audio_player_windows/flutter_audio_player_windows_platform.dart'
+    if (dart.library.io) 'package:flutter_audio_player_windows/flutter_audio_player_windows_platform.dart'
+    if (dart.library.html) 'package:flutter_audio_player_windows/flutter_audio_player_web_platform.dart';
 
 class AudioPlayer {
   AudioPlayer._();
@@ -24,7 +27,7 @@ class AudioPlayer {
   Completer? _initCompleter;
 
   Future<void> init() async {
-    _audioPlayerPlatform = Platform.isWindows ? AudioPlayerWindows() : MethodChannelAudioPlayer();
+    _audioPlayerPlatform = defaultTargetPlatform == TargetPlatform.windows && !kIsWeb ? AudioPlayerWindows() : AudioPlayerPlatform.instance;
     await _audioPlayerPlatform.init();
     _initCompleter = Completer();
   }

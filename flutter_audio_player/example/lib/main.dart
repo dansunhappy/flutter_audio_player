@@ -52,6 +52,9 @@ class _MyAppState extends State<MyApp> {
         AudioPlayer().current.listen((event) {
           print('==== current ${event.toString()}');
         });
+        AudioPlayer().playlistFinished.listen((event) {
+          print('==== playlistFinished ${event.toString()}');
+        });
 
         AudioPlayer().currentPosition.listen((event) {
           print('==== currentPosition ${AudioPlayer().currentPosition.value.toString()}');
