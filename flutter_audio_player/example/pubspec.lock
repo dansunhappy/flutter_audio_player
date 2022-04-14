@@ -141,7 +141,7 @@ packages:
     description:
       path: flutter_audio_player_windows
       ref: HEAD
-      resolved-ref: c0189f32c0c99027dcd62212ec973f531dfe6b3c
+      resolved-ref: "77a757913746f5f35da72e3754d48e3d951e5fed"
       url: "https://github.com/dansunhappy/flutter_audio_player.git"
     source: git
     version: "0.0.10"
