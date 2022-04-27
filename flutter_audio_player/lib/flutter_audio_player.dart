@@ -22,12 +22,12 @@ class AudioPlayer {
     return _instance ??= AudioPlayer._();
   }
 
-  late AudioPlayerPlatform _audioPlayerPlatform;
+  final AudioPlayerPlatform _audioPlayerPlatform = AudioPlayerPlatform.instance;
   static AudioPlayer? _instance;
   Completer? _initCompleter;
 
   Future<void> init() async {
-    _audioPlayerPlatform = defaultTargetPlatform == TargetPlatform.windows && !kIsWeb ? AudioPlayerWindows() : AudioPlayerPlatform.instance;
+    // _audioPlayerPlatform = defaultTargetPlatform == TargetPlatform.windows && !kIsWeb ? AudioPlayerWindows() : AudioPlayerPlatform.instance;
     await _audioPlayerPlatform.init();
     _initCompleter = Completer();
   }

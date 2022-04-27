@@ -118,18 +118,16 @@ packages:
   flutter_audio_player_platform_interface:
     dependency: "direct main"
     description:
-      name: flutter_audio_player_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../flutter_audio_player_platform_interface"
+      relative: true
+    source: path
     version: "0.0.12"
   flutter_audio_player_windows:
     dependency: "direct main"
     description:
-      path: flutter_audio_player_windows
-      ref: HEAD
-      resolved-ref: "77a757913746f5f35da72e3754d48e3d951e5fed"
-      url: "https://github.com/dansunhappy/flutter_audio_player.git"
-    source: git
+      path: "../flutter_audio_player_windows"
+      relative: true
+    source: path
     version: "0.0.10"
   flutter_lints:
     dependency: "direct dev"

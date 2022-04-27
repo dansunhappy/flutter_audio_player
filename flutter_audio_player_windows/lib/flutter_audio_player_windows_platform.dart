@@ -7,6 +7,12 @@ import 'package:rxdart/rxdart.dart';
 
 class AudioPlayerWindows extends AudioPlayerPlatform {
   static AudioPlayerWindows instance = AudioPlayerWindows();
+
+  static void registerWith() {
+    print('====sss register');
+    AudioPlayerPlatform.instance = instance;
+  }
+
   late Player _player;
 
   final BehaviorSubject<Duration> _currentPosition = BehaviorSubject<Duration>.seeded(const Duration());
