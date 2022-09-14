@@ -14,11 +14,17 @@ dependencies:
     git:
       url: https://github.com/dansunhappy/dart_vlc.git
   rxdart: ^0.27.2
-  flutter_audio_player_platform_interface: ^0.0.12
-#  flutter_audio_player_platform_interface:
-#    path: ../flutter_audio_player_platform_interface
+#  flutter_audio_player_platform_interface: ^0.0.12
+  flutter_audio_player_platform_interface:
+    path: ../flutter_audio_player_platform_interface
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
 
+flutter:
+  plugin:
+    implements: flutter_audio_player
+    platforms:
+      windows:
+        dartPluginClass: AudioPlayerWindows

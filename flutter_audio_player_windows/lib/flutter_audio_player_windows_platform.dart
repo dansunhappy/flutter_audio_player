@@ -7,6 +7,108 @@ import 'package:rxdart/rxdart.dart';
 
 class AudioPlayerWindows extends AudioPlayerPlatform {
   static AudioPlayerWindows instance = AudioPlayerWindows();
+  int _textureCounter = 1000;
+  final Map<int, _AudioPlayer> _audioPlayers = <int, _AudioPlayer>{};
+  static void registerWith() {
+    DartVLC.initialize();
+    AudioPlayerPlatform.instance = instance;
+  }
+
+  @override
+  Future<int> init() async {
+    final int textureId = _textureCounter;
+    _textureCounter++;
+    _AudioPlayer _audioPlayer = _AudioPlayer(textureId);
+    await _audioPlayer.init();
+    _audioPlayers[textureId] = _audioPlayer;
+    return textureId;
+  }
+
+  @override
+  Future<void> dispose(int textureId) async {
+    await _audioPlayers[textureId]?.dispose();
+    return;
+  }
+
+  @override
+  Future<void> play(int textureId) async {
+    return _audioPlayers[textureId]?.play();
+  }
+
+  @override
+  Future<void> open(AudioSource dataSource, int textureId) async {
+    return _audioPlayers[textureId]?.open(dataSource);
+  }
+
+  @override
+  Future<void> seek(Duration to, int textureId) async {
+    return _audioPlayers[textureId]?.seek(to);
+  }
+
+  @override
+  ValueStream<AudioDataSource?>? current(int textureId) {
+    return _audioPlayers[textureId]?.current;
+  }
+
+  @override
+  ValueStream<bool>? playlistFinished(int textureId) {
+    return _audioPlayers[textureId]?.playlistFinished;
+  }
+
+  @override
+  ValueStream<double>? playSpeed(int textureId) {
+    return _audioPlayers[textureId]?.playSpeed;
+  }
+
+  @override
+  ValueStream<double>? volume(int textureId) {
+    return _audioPlayers[textureId]?.volume;
+  }
+
+  @override
+  ValueStream<bool>? isBuffering(int textureId) {
+    return _audioPlayers[textureId]?.isBuffering;
+  }
+
+  @override
+  ValueStream<bool>? isPlaying(int textureId) {
+    return _audioPlayers[textureId]?.isPlaying;
+  }
+
+  @override
+  ValueStream<Duration>? currentPosition(int textureId) {
+    return _audioPlayers[textureId]?.currentPosition;
+  }
+
+  @override
+  Stream<AudioPlayerState>? playerState(int textureId) {
+    return _audioPlayers[textureId]?.playerState;
+  }
+
+  @override
+  Stream<AudioDataSource?>? onReadyToPlay(int textureId) {
+    return _audioPlayers[textureId]?.onReadyToPlay;
+  }
+
+  @override
+  Future<void> pause(int textureId) async {
+    return _audioPlayers[textureId]?.pause();
+  }
+
+  @override
+  Future<void> stop(int textureId) async {
+    return _audioPlayers[textureId]?.stop();
+  }
+
+  @override
+  Future<void> setPlaySpeed(double playSpeed, int textureId) async {
+    return _audioPlayers[textureId]?.setPlaySpeed(playSpeed);
+  }
+}
+
+class _AudioPlayer {
+  _AudioPlayer(this.id);
+  final int id;
   late Player _player;
 
   final BehaviorSubject<Duration> _currentPosition = BehaviorSubject<Duration>.seeded(const Duration());
@@ -28,9 +130,7 @@ class AudioPlayerWindows extends AudioPlayerPlatform {
 
   late VoidCallback _onListener;
   bool _isReadPlay = false;
-  @override
   Future<void> init() async {
-    DartVLC.initialize();
     _player = Player(id: 9999);
     _player.textureId.addListener(() {});
     _onListener = () {
@@ -65,7 +165,9 @@ class AudioPlayerWindows extends AudioPlayerPlatform {
         if (_player.playback.isPlaying) {
           if (!_isReadPlay) {
             _player.setVolume(1.0);
-            AudioDataSource audioDataSource = _covertMediaToAudioDataSource(_player.current.media ?? Media.asset(''));
+            AudioDataSource audioDataSource = _covertMediaToAudioDataSource(
+              _player.current.media ?? Media.asset(''),
+            );
             _onReadyToPlay.add(audioDataSource);
             _isReadPlay = true;
           }
@@ -84,7 +186,6 @@ class AudioPlayerWindows extends AudioPlayerPlatform {
     _player.textureId.addListener(_onListener);
   }
 
-  @override
   Future<void> dispose() async {
     _player.dispose();
     _player.textureId.removeListener(_onListener);
@@ -99,37 +200,30 @@ class AudioPlayerWindows extends AudioPlayerPlatform {
     await _onReadyToPlay.close();
   }
 
-  @override
   Future<void> play() async {
     return _player.play();
   }
 
-  @override
   Future<void> pause() async {
     return _player.pause();
   }
 
-  @override
   ValueStream<bool> get playlistFinished {
     return _playlistFinished.stream;
   }
 
-  @override
   ValueStream<bool> get isPlaying {
     return _isPlaying.stream;
   }
 
-  @override
   ValueStream<AudioDataSource?> get current {
     return _current.stream;
   }
 
-  @override
   Stream<AudioPlayerState> get playerState {
     return _playerState.stream;
   }
 
-  @override
   Future<void> open(AudioSource dataSource) async {
     if (dataSource is AudioDataSource) {
       Media media = _coverAudioDataSourceToMedial(dataSource);
@@ -141,43 +235,35 @@ class AudioPlayerWindows extends AudioPlayerPlatform {
     }
   }
 
-  @override
   Stream<AudioDataSource?> get onReadyToPlay {
     return _onReadyToPlay.stream;
   }
 
-  @override
   Future<void> setPlaySpeed(double playSpeed) async {
     return _player.setRate(playSpeed);
   }
 
-  @override
   Future<void> seek(Duration to) async {
     return _player.seek(to);
   }
 
-  @override
   ValueStream<double> get playSpeed {
     return _playSpeed.stream;
   }
 
-  @override
   ValueStream<double> get volume {
     return _volume.stream;
   }
 
-  @override
   Future<void> stop() async {
     _playerState.add(AudioPlayerState.stop);
     _player.stop();
   }
 
-  @override
   ValueStream<bool> get isBuffering {
     return _isBuffering.stream;
   }
 
-  @override
   ValueStream<Duration> get currentPosition {
     return _currentPosition.stream;
   }

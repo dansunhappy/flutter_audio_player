@@ -10,16 +10,27 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_audio_player_platform_interface: ^0.0.12
-#  flutter_audio_player_platform_interface:
-#    path: ../flutter_audio_player_platform_interface
-  flutter_audio_player_windows:
-    git:
-      url: https://github.com/dansunhappy/flutter_audio_player.git
-      path: flutter_audio_player_windows
+#  flutter_audio_player_platform_interface: ^0.0.12
+  flutter_audio_player_platform_interface:
+    path: ../flutter_audio_player_platform_interface
 #  flutter_audio_player_windows:
-#    path: ../flutter_audio_player_windows
+#    git:
+#      url: https://github.com/dansunhappy/flutter_audio_player.git
+#      path: flutter_audio_player_windows
+  flutter_audio_player_windows:
+    path: ../flutter_audio_player_windows
   rxdart: ^0.27.2
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: flutter_audio_player_platform_interface
+      ios:
+        default_package: flutter_audio_player_platform_interface
+      web:
+        default_package: flutter_audio_player_platform_interface
+      windows:
+        default_package: flutter_audio_player_windows
 dev_dependencies:
   flutter_test:
     sdk: flutter

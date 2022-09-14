@@ -10,13 +10,15 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
   late AssetsAudioPlayer audioPlayer;
   final BehaviorSubject<AudioDataSource> _current = BehaviorSubject<AudioDataSource>();
   final BehaviorSubject<AudioDataSource> _onReadyPlay = BehaviorSubject<AudioDataSource>();
+  int textureId = 1000;
   @override
-  Future<void> init() async {
-    audioPlayer = AssetsAudioPlayer.withId('SINGLE_PLAYER');
+  Future<int> init() async {
+    audioPlayer = AssetsAudioPlayer.withId('${textureId++}');
+    return textureId;
   }
 
   @override
-  Future<void> open(AudioSource dataSource) {
+  Future<void> open(AudioSource dataSource, int textureId) {
     Playable audio = Playable();
     audioPlayer.current.listen((event) {
       _current.add(
@@ -41,58 +43,60 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
   }
 
   @override
-  Future<void> play() {
+  Future<void> play(int textureId) {
     return audioPlayer.play();
   }
 
   @override
-  Future<void> pause() {
+  Future<void> pause(int textureId) {
     return audioPlayer.pause();
   }
 
   @override
-  Future<void> stop() {
+  Future<void> stop(int textureId) {
     return audioPlayer.stop();
   }
 
   @override
-  Future<void> setPlaySpeed(double playSpeed) {
+  Future<void> setPlaySpeed(double playSpeed, int textureId) {
     return audioPlayer.setPlaySpeed(playSpeed);
   }
 
   @override
-  Future<void> seek(Duration to) {
+  Future<void> seek(Duration to, int textureId) {
     return audioPlayer.seek(to);
   }
 
   @override
-  ValueStream<double> get playSpeed {
+  ValueStream<double> playSpeed(int textureId) {
     return audioPlayer.playSpeed;
   }
 
   @override
-  ValueStream<double> get volume {
+  ValueStream<double> volume(int textureId) {
     return audioPlayer.volume;
   }
 
   @override
-  ValueStream<bool> get isBuffering {
+  ValueStream<bool> isBuffering(int textureId) {
     return audioPlayer.isBuffering;
   }
 
   @override
-  ValueStream<Duration> get currentPosition {
+  ValueStream<Duration> currentPosition(int textureId) {
     return audioPlayer.currentPosition;
   }
 
   @override
-  ValueStream<bool> get isPlaying => audioPlayer.isPlaying;
+  ValueStream<bool>? isPlaying(int textureId) => audioPlayer.isPlaying;
 
   @override
-  ValueStream<bool> get playlistFinished => audioPlayer.playlistFinished;
+  ValueStream<bool>? playlistFinished(int textureId) {
+    return audioPlayer.playlistFinished;
+  }
 
   @override
-  Stream<AudioPlayerState> get playerState {
+  Stream<AudioPlayerState> playerState(int textureId) {
     return audioPlayer.playerState.transform(StreamTransformer<PlayerState, AudioPlayerState>.fromHandlers(handleData: (data, sink) {
       AudioPlayerState event = AudioPlayerState.unknown;
       switch (data) {
@@ -111,12 +115,12 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
   }
 
   @override
-  ValueStream<AudioDataSource?> get current {
+  ValueStream<AudioDataSource?> current(int textureId) {
     return _current.stream;
   }
 
   @override
-  Stream<AudioDataSource?> get onReadyToPlay {
+  Stream<AudioDataSource?> onReadyToPlay(int textureId) {
     // print('audioPlayer.onReadyToPlay.runtimeType ${audioPlayer.onReadyToPlay.listen((event) {
     //   print('sssss ${event.toString()}');
     // })}');
@@ -179,9 +183,9 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
   }
 
   @override
-  Future<void> dispose() async {
+  Future<void> dispose(int textureId) async {
     audioPlayer.dispose();
     await _current.close();
-    return super.dispose();
+    return super.dispose(textureId);
   }
 }

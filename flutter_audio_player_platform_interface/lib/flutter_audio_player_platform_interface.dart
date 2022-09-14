@@ -39,68 +39,68 @@ abstract class AudioPlayerPlatform {
   bool get isMock => false;
 
   ///初始化
-  Future<void> init() async {
+  Future<int> init() async {
     throw UnimplementedError('init() has not been implemented.');
   }
 
-  Future<void> dispose() async {
+  Future<void> dispose(int textureId) async {
     throw UnimplementedError('dispose() has not been implemented.');
   }
 
-  Future<void> open(AudioSource dataSource) async {
+  Future<void> open(AudioSource dataSource, int textureId) async {
     throw UnimplementedError('open() has not been implemented.');
   }
 
-  ValueStream<double> get playSpeed {
+  ValueStream<double>? playSpeed(int textureId) {
     throw UnimplementedError('playSpeed() has not been implemented.');
   }
 
-  ValueStream<double> get volume {
+  ValueStream<double>? volume(int textureId) {
     throw UnimplementedError('volume() has not been implemented.');
   }
 
-  ValueStream<bool> get isBuffering {
+  ValueStream<bool>? isBuffering(int textureId) {
     throw UnimplementedError('isBuffering() has not been implemented.');
   }
 
-  ValueStream<bool> get isPlaying {
+  ValueStream<bool>? isPlaying(int textureId) {
     throw UnimplementedError('isPlaying() has not been implemented.');
   }
 
-  ValueStream<Duration> get currentPosition {
+  ValueStream<Duration>? currentPosition(int textureId) {
     throw UnimplementedError('currentPosition() has not been implemented.');
   }
 
-  Stream<AudioPlayerState> get playerState {
+  Stream<AudioPlayerState>? playerState(int textureId) {
     throw UnimplementedError('playerState() has not been implemented.');
   }
 
-  Stream<AudioDataSource?> get onReadyToPlay {
+  Stream<AudioDataSource?>? onReadyToPlay(int textureId) {
     throw UnimplementedError('currentPosition() has not been implemented.');
   }
 
-  ValueStream<AudioDataSource?> get current {
+  ValueStream<AudioDataSource?>? current(int textureId) {
     throw UnimplementedError('current() has not been implemented.');
   }
 
   ///播放
-  Future<void> play() async {
+  Future<void> play(int textureId) async {
     throw UnimplementedError('play() has not been implemented.');
   }
 
-  Future<void> pause() async {
+  Future<void> pause(int textureId) async {
     throw UnimplementedError('pause() has not been implemented.');
   }
 
-  Future<void> seek(Duration to) async {
+  Future<void> seek(Duration to, int textureId) async {
     throw UnimplementedError('seek() has not been implemented.');
   }
 
-  ValueStream<bool> get playlistFinished {
+  ValueStream<bool>? playlistFinished(int textureId) {
     throw UnimplementedError('playlistFinished() has not been implemented.');
   }
 
-  Future<void> stop() async {
+  Future<void> stop(int textureId) async {
     throw UnimplementedError('stop() has not been implemented.');
   }
 
@@ -111,7 +111,7 @@ abstract class AudioPlayerPlatform {
   ///
   /// if null, set to defaultPlaySpeed (1.0)
   ///
-  Future<void> setPlaySpeed(double playSpeed) async {
+  Future<void> setPlaySpeed(double playSpeed, int textureId) async {
     throw UnimplementedError('setPlaySpeed() has not been implemented.');
   }
 
