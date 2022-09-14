@@ -118,10 +118,10 @@ packages:
   flutter_audio_player_platform_interface:
     dependency: "direct main"
     description:
-      path: "../flutter_audio_player_platform_interface"
-      relative: true
-    source: path
-    version: "0.0.12"
+      name: flutter_audio_player_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.13"
   flutter_lints:
     dependency: "direct dev"
     description:
