@@ -1,6 +1,6 @@
 name: flutter_audio_player_platform_interface
-description: A new flutter plugin project.
-version: 0.0.12
+description: audio player support windows
+version: 0.0.13
 homepage:
 
 environment:

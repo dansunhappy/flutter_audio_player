@@ -10,9 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-#  flutter_audio_player_platform_interface: ^0.0.12
-  flutter_audio_player_platform_interface:
-    path: ../flutter_audio_player_platform_interface
+  flutter_audio_player_platform_interface: ^0.0.13
+#  flutter_audio_player_platform_interface:
+#    path: ../flutter_audio_player_platform_interface
 #  flutter_audio_player_windows:
 #    git:
 #      url: https://github.com/dansunhappy/flutter_audio_player.git
