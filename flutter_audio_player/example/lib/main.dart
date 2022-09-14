@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_player/flutter_audio_player.dart';
-// import 'package:flutter_audio_player_platform_interface/flutter_audio_player_platform_interface.dart';
 import 'package:flutter_audio_player_platform_interface/audio_data_source.dart';
 
 void main() {

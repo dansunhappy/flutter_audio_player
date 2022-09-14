@@ -7,19 +7,114 @@ import 'package:rxdart/rxdart.dart';
 import 'audio_data_source.dart';
 
 class MethodChannelAudioPlayer extends AudioPlayerPlatform {
-  late AssetsAudioPlayer audioPlayer;
-  final BehaviorSubject<AudioDataSource> _current = BehaviorSubject<AudioDataSource>();
-  final BehaviorSubject<AudioDataSource> _onReadyPlay = BehaviorSubject<AudioDataSource>();
-  int textureId = 1000;
+  static MethodChannelAudioPlayer instance = MethodChannelAudioPlayer();
+  int _textureCounter = 1000;
+  final Map<int, _MethodAudioPlayer> _audioPlayers = <int, _MethodAudioPlayer>{};
+  static void registerWith() {
+    AudioPlayerPlatform.instance = instance;
+  }
+
   @override
   Future<int> init() async {
-    audioPlayer = AssetsAudioPlayer.withId('${textureId++}');
+    final int textureId = _textureCounter;
+    _textureCounter++;
+    _MethodAudioPlayer _audioPlayer = _MethodAudioPlayer(textureId);
+    _audioPlayer.init();
+    _audioPlayers[textureId] = _audioPlayer;
     return textureId;
   }
 
   @override
-  Future<void> open(AudioSource dataSource, int textureId) {
-    Playable audio = Playable();
+  Future<void> dispose(int textureId) async {
+    await _audioPlayers[textureId]?.dispose();
+    return;
+  }
+
+  @override
+  Future<void> play(int textureId) async {
+    return _audioPlayers[textureId]?.play();
+  }
+
+  @override
+  Future<void> open(AudioSource dataSource, int textureId) async {
+    return _audioPlayers[textureId]?.open(dataSource);
+  }
+
+  @override
+  Future<void> seek(Duration to, int textureId) async {
+    return _audioPlayers[textureId]?.seek(to);
+  }
+
+  @override
+  ValueStream<AudioDataSource?>? current(int textureId) {
+    return _audioPlayers[textureId]?.current;
+  }
+
+  @override
+  ValueStream<bool>? playlistFinished(int textureId) {
+    return _audioPlayers[textureId]?.playlistFinished;
+  }
+
+  @override
+  ValueStream<double>? playSpeed(int textureId) {
+    return _audioPlayers[textureId]?.playSpeed;
+  }
+
+  @override
+  ValueStream<double>? volume(int textureId) {
+    return _audioPlayers[textureId]?.volume;
+  }
+
+  @override
+  ValueStream<bool>? isBuffering(int textureId) {
+    return _audioPlayers[textureId]?.isBuffering;
+  }
+
+  @override
+  ValueStream<bool>? isPlaying(int textureId) {
+    return _audioPlayers[textureId]?.isPlaying;
+  }
+
+  @override
+  ValueStream<Duration>? currentPosition(int textureId) {
+    return _audioPlayers[textureId]?.currentPosition;
+  }
+
+  @override
+  Stream<AudioPlayerState>? playerState(int textureId) {
+    return _audioPlayers[textureId]?.playerState;
+  }
+
+  @override
+  Stream<AudioDataSource?>? onReadyToPlay(int textureId) {
+    return _audioPlayers[textureId]?.onReadyToPlay;
+  }
+
+  @override
+  Future<void> pause(int textureId) async {
+    return _audioPlayers[textureId]?.pause();
+  }
+
+  @override
+  Future<void> stop(int textureId) async {
+    return _audioPlayers[textureId]?.stop();
+  }
+
+  @override
+  Future<void> setPlaySpeed(double playSpeed, int textureId) async {
+    return _audioPlayers[textureId]?.setPlaySpeed(playSpeed);
+  }
+}
+
+class _MethodAudioPlayer {
+  _MethodAudioPlayer(this.textureId);
+  final int textureId;
+  late AssetsAudioPlayer audioPlayer;
+  final BehaviorSubject<AudioDataSource> _current = BehaviorSubject<AudioDataSource>();
+  final BehaviorSubject<AudioDataSource> _onReadyPlay = BehaviorSubject<AudioDataSource>();
+
+  void init() {
+    audioPlayer = AssetsAudioPlayer.withId(textureId.toString());
     audioPlayer.current.listen((event) {
       _current.add(
         _covertPlayingAudioToAudioDataSource(event?.audio ?? PlayingAudio(audio: Audio(''))),
@@ -28,6 +123,10 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
     audioPlayer.onReadyToPlay.listen((event) {
       _onReadyPlay.add(_covertPlayingAudioToAudioDataSource(event ?? PlayingAudio(audio: Audio(''))));
     });
+  }
+
+  Future<void> open(AudioSource dataSource) {
+    Playable audio = Playable();
     if (dataSource is AudioDataSource && dataSource.audioSourceType == AudioSourceType.audio) {
       audio = _covertAudioDataSourceToAudio(dataSource);
     } else if (dataSource is AudioPlaylist) {
@@ -35,68 +134,55 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
         audios: dataSource.playList.map(_covertAudioDataSourceToAudio).toList(),
       );
     }
-
     return audioPlayer.open(
       audio,
       playInBackground: PlayInBackground.disabledPause,
     );
   }
 
-  @override
-  Future<void> play(int textureId) {
+  Future<void> play() {
     return audioPlayer.play();
   }
 
-  @override
-  Future<void> pause(int textureId) {
+  Future<void> pause() {
     return audioPlayer.pause();
   }
 
-  @override
-  Future<void> stop(int textureId) {
+  Future<void> stop() {
     return audioPlayer.stop();
   }
 
-  @override
-  Future<void> setPlaySpeed(double playSpeed, int textureId) {
+  Future<void> setPlaySpeed(double playSpeed) {
     return audioPlayer.setPlaySpeed(playSpeed);
   }
 
-  @override
-  Future<void> seek(Duration to, int textureId) {
+  Future<void> seek(Duration to) {
     return audioPlayer.seek(to);
   }
 
-  @override
-  ValueStream<double> playSpeed(int textureId) {
+  ValueStream<double> get playSpeed {
     return audioPlayer.playSpeed;
   }
 
-  @override
-  ValueStream<double> volume(int textureId) {
+  ValueStream<double> get volume {
     return audioPlayer.volume;
   }
 
-  @override
-  ValueStream<bool> isBuffering(int textureId) {
+  ValueStream<bool> get isBuffering {
     return audioPlayer.isBuffering;
   }
 
-  @override
-  ValueStream<Duration> currentPosition(int textureId) {
+  ValueStream<Duration> get currentPosition {
     return audioPlayer.currentPosition;
   }
 
-  @override
-  ValueStream<bool>? isPlaying(int textureId) => audioPlayer.isPlaying;
+  ValueStream<bool>? get isPlaying => audioPlayer.isPlaying;
 
-  @override
-  ValueStream<bool>? playlistFinished(int textureId) {
+  ValueStream<bool>? get playlistFinished {
     return audioPlayer.playlistFinished;
   }
 
-  @override
-  Stream<AudioPlayerState> playerState(int textureId) {
+  Stream<AudioPlayerState> get playerState {
     return audioPlayer.playerState.transform(StreamTransformer<PlayerState, AudioPlayerState>.fromHandlers(handleData: (data, sink) {
       AudioPlayerState event = AudioPlayerState.unknown;
       switch (data) {
@@ -114,13 +200,11 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
     }));
   }
 
-  @override
-  ValueStream<AudioDataSource?> current(int textureId) {
+  ValueStream<AudioDataSource?> get current {
     return _current.stream;
   }
 
-  @override
-  Stream<AudioDataSource?> onReadyToPlay(int textureId) {
+  Stream<AudioDataSource?> get onReadyToPlay {
     // print('audioPlayer.onReadyToPlay.runtimeType ${audioPlayer.onReadyToPlay.listen((event) {
     //   print('sssss ${event.toString()}');
     // })}');
@@ -182,10 +266,9 @@ class MethodChannelAudioPlayer extends AudioPlayerPlatform {
     return audio;
   }
 
-  @override
-  Future<void> dispose(int textureId) async {
+  Future<void> dispose() async {
     audioPlayer.dispose();
     await _current.close();
-    return super.dispose(textureId);
+    return;
   }
 }

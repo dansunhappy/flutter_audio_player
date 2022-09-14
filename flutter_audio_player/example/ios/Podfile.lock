@@ -3,32 +3,21 @@ PODS:
     - Flutter
   - assets_audio_player_web (0.0.1):
     - Flutter
-  - dart_vlc (0.0.1):
-    - Flutter
-    - MobileVLCKit (~> 3.3.0)
   - Flutter (1.0.0)
-  - MobileVLCKit (3.3.17)
   - path_provider_ios (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - assets_audio_player (from `.symlinks/plugins/assets_audio_player/ios`)
   - assets_audio_player_web (from `.symlinks/plugins/assets_audio_player_web/ios`)
-  - dart_vlc (from `.symlinks/plugins/dart_vlc/ios`)
   - Flutter (from `Flutter`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
-
-SPEC REPOS:
-  trunk:
-    - MobileVLCKit
 
 EXTERNAL SOURCES:
   assets_audio_player:
     :path: ".symlinks/plugins/assets_audio_player/ios"
   assets_audio_player_web:
     :path: ".symlinks/plugins/assets_audio_player_web/ios"
-  dart_vlc:
-    :path: ".symlinks/plugins/dart_vlc/ios"
   Flutter:
     :path: Flutter
   path_provider_ios:
@@ -37,10 +26,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   assets_audio_player: edee322b9cb625571b830b35872ead1a295fd917
   assets_audio_player_web: 19826380c44375761aa0b9053665c1e3fbc3b86b
-  dart_vlc: d168523a627873627f9cecdf061915a0834e407a
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  MobileVLCKit: c5dd1b0ae933dc9c2348099840e753496dcdd908
-  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
